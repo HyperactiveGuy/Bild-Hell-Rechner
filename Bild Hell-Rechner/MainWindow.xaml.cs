@@ -27,6 +27,8 @@ namespace Bild_Hell_Rechner
             InitializeComponent();
         }
 
+        //TestComment
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Button pressedButton = (Button)sender;
