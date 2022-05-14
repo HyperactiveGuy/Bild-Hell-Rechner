@@ -28,7 +28,8 @@ namespace Bild_Hell_Rechner
         }
 
         //TestComment
-
+        //Another Comment
+        //Third Test
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Button pressedButton = (Button)sender;
@@ -39,9 +40,6 @@ namespace Bild_Hell_Rechner
                 OpenFileDialog openFileDialog = new OpenFileDialog();
                 if (openFileDialog.ShowDialog() == true)
                 {
-
-
-
                     FileInfo chosenFile = new FileInfo(openFileDialog.FileName);
 
                     Console.WriteLine(IsFileLegalImage(chosenFile));
