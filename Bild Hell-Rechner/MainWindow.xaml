@@ -8,7 +8,7 @@
         Title="MainWindow" Height="450" Width="800">
 
 
-    <Canvas>
+    <Canvas Background="#333333">
         <Button x:Name="btnLoadFile" Height="61" Width="100" Canvas.Left="20" Canvas.Top="329" Content="Load Image" Click="Button_Click"/>
         <Button x:Name="btnBrightenUp" Height="61" Width="100" Canvas.Left="140" Canvas.Top="329" Content="Brighten Up" Click="Button_Click"/>
         <Button x:Name="btnSaveImage" Height="61" Width="100" Canvas.Left="260" Canvas.Top="329" Content="Save Image" Click="Button_Click"/>
