@@ -5,23 +5,51 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Bild_Hell_Rechner"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        WindowState="Maximized">
 
 
-    <Canvas Background="#333333">
-        <Button x:Name="btnLoadFile" Height="61" Width="100" Canvas.Left="20" Canvas.Top="329" Content="Load Image" Click="Button_Click"/>
-        <Button x:Name="btnBrightenUp" Height="61" Width="100" Canvas.Left="140" Canvas.Top="329" Content="Brighten Up" Click="Button_Click"/>
-        <Button x:Name="btnSaveImage" Height="61" Width="100" Canvas.Left="260" Canvas.Top="329" Content="Save Image" Click="Button_Click"/>
 
-        <Grid Width="500" Height="300" ShowGridLines="True" Margin="120 0 0 0">
+
+    <Grid Background="#232323">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="30*"/>
+            <ColumnDefinition Width="10*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="6*"/>
+            <RowDefinition Height="0.5*"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Column="0" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Image x:Name="imgSource" Grid.Column="0"/>
-            <Image x:Name="imgResult" Grid.Column="1"/>
+
+            <Button x:Name="btnLoadImage" Content="Load" Grid.Column="0" Margin="3" Click="Button_Click"/>
+            <Button x:Name="btnSaveImage" Content="Save" Grid.Column="1" Margin="3" Click="Button_Click"/>
+
         </Grid>
 
+        <Grid Grid.Column="2" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
 
-    </Canvas>
+            <Rectangle Fill="#DDDDDD" Margin="3" Grid.Column="0"/>
+            <Label Content="{Binding ElementName=sldBrightness, Path=Value}" Foreground="#555555" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Button x:Name="btnBrightenUp" Content="Shine" Margin="3" Grid.Column="1" Click="Button_Click"/>
+        </Grid>
+
+        <Rectangle Fill="#555555" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3"/>
+        <Image x:Name="img" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3"/>
+
+
+        <Slider x:Name="sldBrightness" IsSnapToTickEnabled="True" TickPlacement="BottomRight" Minimum="1" Maximum="10" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Margin="20 0"/>
+
+    </Grid>
+
 </Window>

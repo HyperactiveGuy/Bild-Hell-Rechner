@@ -4,6 +4,9 @@
              xmlns:local="clr-namespace:Bild_Hell_Rechner"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="20"/>
+        </Style>
+
     </Application.Resources>
 </Application>

@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.IO;
 using System.Drawing;
@@ -23,37 +13,54 @@ namespace Bild_Hell_Rechner
     /// </summary>
     public partial class MainWindow : Window
     {
+        FileInfo chosenFile;
         public MainWindow()
         {
             InitializeComponent();
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Button pressedButton = (Button)sender;
-
-            if (pressedButton.Name == "btnLoadFile")
+            if (pressedButton.Name == "btnLoadImage")
             {
-                //Oeffnet Explorer
-                OpenFileDialog openFileDialog = new OpenFileDialog();
-                if (openFileDialog.ShowDialog() == true)
+                ChoseSourceImage();
+            }
+            else if (pressedButton.Name == "btnBrightenUp")
+            {
+                ImageBrightener.BrightenUp(chosenFile.FullName, (int)sldBrightness.Value, chosenFile);
+            }
+        }
+
+
+
+        /// <summary>
+        /// Oens File Explorer and sets the Source Image
+        /// after User-Input
+        /// </summary>
+        private void ChoseSourceImage()
+        {
+            //Oeffnet Explorer
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+            {
+                chosenFile = new FileInfo(openFileDialog.FileName);
+
+                if (IsFileLegalImage(chosenFile))
                 {
-                    FileInfo chosenFile = new FileInfo(openFileDialog.FileName);
+                    img.Source = new BitmapImage(new Uri(chosenFile.FullName)); //Fuegt Image in GUI ein
 
-                    Console.WriteLine(IsFileLegalImage(chosenFile));
-                    if (IsFileLegalImage(chosenFile))
-                    {
-                        imgSource.Source = new BitmapImage(new Uri(chosenFile.FullName)); //Fuegt Image in GUI ein
-
-                        TestDataTypeStuffLolHaha(new BitmapImage(new Uri(chosenFile.FullName)), chosenFile.FullName); //My test Method
-                    }
+                    // TestDataTypeStuffLolHaha(new BitmapImage(new Uri(chosenFile.FullName)), chosenFile.FullName); //My test Method
                 }
             }
         }
 
+
         /// <summary>
         /// Checks, if a File is an Image with a legal extension
         /// </summary>
+        ///<param name="file"></param>
         private bool IsFileLegalImage(FileInfo file)
         {
             string[] extensions = new string[] { ".png", ".jpg", ".jpeg" };
@@ -69,10 +76,15 @@ namespace Bild_Hell_Rechner
         }
 
 
-//TODO Understand Code from Stack Overflow
-        private void TestDataTypeStuffLolHaha(BitmapImage img, string imgPath)
+        //TODO Understand Code from Stack Overflow
+        /// <summary>
+        /// Do not call this in finished Project!
+        /// Just for testing stuff lulZ
+        /// </summary>
+        /// <param name="imgPath"></param>
+        private void TestDataTypeStuffLolHaha(string imgPath)
         {
-
+            return;
             Bitmap bmp = new Bitmap(imgPath);
 
             MemoryStream ms = new MemoryStream();
@@ -80,13 +92,29 @@ namespace Bild_Hell_Rechner
             bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
 
             BitmapImage image = new BitmapImage();
-            image.BeginInit();
+
+
+
+            //  image.BeginInit();
             ms.Seek(0, SeekOrigin.Begin);
             image.StreamSource = ms;
-            image.EndInit();
-            imgResult.Source = image;
+
+            //image.EndInit();
 
 
+
+            Byte[] streamFile = ms.ToArray();
+
+
+
+            MemoryStream streamy = new MemoryStream(streamFile);
+            image.StreamSource = streamy;
+
+            ms.Dispose(); //Macht Probleme TODO: Fix
+            img.Source = image;
         }
+
+
+
     }
 }
