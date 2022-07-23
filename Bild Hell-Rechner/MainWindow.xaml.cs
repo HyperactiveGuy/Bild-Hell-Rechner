@@ -14,6 +14,7 @@ namespace Bild_Hell_Rechner
     public partial class MainWindow : Window
     {
         FileInfo chosenFile;
+        MemoryStream ms;
         public MainWindow()
         {
             InitializeComponent();
@@ -29,14 +30,35 @@ namespace Bild_Hell_Rechner
             }
             else if (pressedButton.Name == "btnBrightenUp")
             {
-                ImageBrightener.BrightenUp(chosenFile.FullName, (int)sldBrightness.Value, chosenFile);
+                CreateBrighterImage();
+
+            }
+            else if (pressedButton.Name == "btnSaveImage")
+            {
+                SaveImage();
             }
         }
 
+        private void CreateBrighterImage()
+        {
+            Bitmap bmpResult = ImageBrightener.BrightenUp(chosenFile.FullName, (int)sldBrightness.Value, chosenFile);
+            BitmapImage bmpi = new BitmapImage();
+
+            ms = new MemoryStream();
+            bmpResult.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+
+            ms.Seek(0, SeekOrigin.Begin);
+
+            bmpi.BeginInit();
+            bmpi.StreamSource = ms;
+            bmpi.EndInit();
+
+            img.Source = bmpi;
+        }
 
 
         /// <summary>
-        /// Oens File Explorer and sets the Source Image
+        /// Opens File Explorer and sets the Source Image
         /// after User-Input
         /// </summary>
         private void ChoseSourceImage()
@@ -51,11 +73,22 @@ namespace Bild_Hell_Rechner
                 {
                     img.Source = new BitmapImage(new Uri(chosenFile.FullName)); //Fuegt Image in GUI ein
 
-                    // TestDataTypeStuffLolHaha(new BitmapImage(new Uri(chosenFile.FullName)), chosenFile.FullName); //My test Method
+                    //TestDataTypeStuffLolHaha(chosenFile.FullName); //My test Method
                 }
             }
         }
 
+        private void SaveImage()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "JPeg Image|*.jpg|Png Image|*.png";
+            saveFileDialog.ShowDialog();
+            Console.Write($"Target Path: {saveFileDialog.FileName}");
+            Bitmap bitmap = new Bitmap(ms);
+            bitmap.Save(saveFileDialog.FileName);
+
+
+        }
 
         /// <summary>
         /// Checks, if a File is an Image with a legal extension
@@ -84,7 +117,7 @@ namespace Bild_Hell_Rechner
         /// <param name="imgPath"></param>
         private void TestDataTypeStuffLolHaha(string imgPath)
         {
-            return;
+            //  return;
             Bitmap bmp = new Bitmap(imgPath);
 
             MemoryStream ms = new MemoryStream();
@@ -94,23 +127,16 @@ namespace Bild_Hell_Rechner
             BitmapImage image = new BitmapImage();
 
 
-
-            //  image.BeginInit();
+            image.BeginInit();
             ms.Seek(0, SeekOrigin.Begin);
-            image.StreamSource = ms;
-
-            //image.EndInit();
-
-
-
-            Byte[] streamFile = ms.ToArray();
-
-
-
-            MemoryStream streamy = new MemoryStream(streamFile);
+            MemoryStream streamy = new MemoryStream(ms.ToArray());
             image.StreamSource = streamy;
 
-            ms.Dispose(); //Macht Probleme TODO: Fix
+            image.EndInit();
+
+            image.StreamSource = streamy;
+
+            // ms.Dispose(); //Macht Probleme TODO: Fix
             img.Source = image;
         }
 

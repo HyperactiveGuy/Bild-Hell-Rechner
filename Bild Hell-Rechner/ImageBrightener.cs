@@ -14,7 +14,7 @@ namespace Bild_Hell_Rechner
     internal static class ImageBrightener
     {
 
-        public static void BrightenUp(string imagePath, int brightnessMultiplicator, FileInfo file)
+        public static Bitmap BrightenUp(string imagePath, int brightnessMultiplicator, FileInfo file)
         {
             Console.WriteLine("Starting with brightening-process...");
 
@@ -47,9 +47,12 @@ namespace Bild_Hell_Rechner
                 }
                 Console.WriteLine($"Finished Row {y} of {image.Height}");
             }
+            
             Console.WriteLine("Finished");
-            image.Save(@"D:\Compare\" + file.Name);
-            Console.WriteLine("Image saved successfully (I hope...)");
+           // image.Save(@"D:\Compare\" + file.Name);
+           // Console.WriteLine("Image saved successfully (I hope...)");
+
+            return image;
         }
 
     }

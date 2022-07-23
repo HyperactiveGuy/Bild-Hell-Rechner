@@ -8,9 +8,6 @@
         Title="MainWindow" Height="450" Width="800"
         WindowState="Maximized">
 
-
-
-
     <Grid Background="#232323">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10*"/>
