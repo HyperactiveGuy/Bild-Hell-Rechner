@@ -5,6 +5,7 @@ using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using System.IO;
 using System.Drawing;
+using System.Threading.Tasks;
 
 namespace Bild_Hell_Rechner
 {
@@ -26,6 +27,7 @@ namespace Bild_Hell_Rechner
             Button pressedButton = (Button)sender;
             if (pressedButton.Name == "btnLoadImage")
             {
+
                 ChoseSourceImage();
             }
             else if (pressedButton.Name == "btnBrightenUp")
@@ -39,9 +41,22 @@ namespace Bild_Hell_Rechner
             }
         }
 
+        private void TaskTest()
+        {
+
+            Task t1 = Task.Run(() => Test(1));
+            Task t2 = Task.Run(() => Test(2));
+            Task t3 = Task.Run(() => Test(3));
+            Task t4 = Task.Run(() => Test(4));
+        }
+        private void Test(int x)
+        {
+            Console.WriteLine("Testi " + x);
+        }
+
         private void CreateBrighterImage()
         {
-            Bitmap bmpResult = ImageBrightener.BrightenUp(chosenFile.FullName, (int)sldBrightness.Value, chosenFile);
+            Bitmap bmpResult = ImageBrightener.BrightenUp(chosenFile.FullName, (int)sldBrightness.Value);
             BitmapImage bmpi = new BitmapImage();
 
             ms = new MemoryStream();
@@ -81,13 +96,10 @@ namespace Bild_Hell_Rechner
         private void SaveImage()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "JPeg Image|*.jpg|Png Image|*.png";
-            saveFileDialog.ShowDialog();
-            Console.Write($"Target Path: {saveFileDialog.FileName}");
+            saveFileDialog.Filter = "Png Image|*.png|JPeg Image|*.jpg"; //Legt Fest, welche Datentyoen zum Speicher erlaubt sind
+            saveFileDialog.ShowDialog(); //Oeffnet Explorer
             Bitmap bitmap = new Bitmap(ms);
             bitmap.Save(saveFileDialog.FileName);
-
-
         }
 
         /// <summary>
@@ -139,8 +151,6 @@ namespace Bild_Hell_Rechner
             // ms.Dispose(); //Macht Probleme TODO: Fix
             img.Source = image;
         }
-
-
 
     }
 }
