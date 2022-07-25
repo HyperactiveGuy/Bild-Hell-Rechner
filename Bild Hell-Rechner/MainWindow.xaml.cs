@@ -32,8 +32,7 @@ namespace Bild_Hell_Rechner
                 ChoseSourceImage();
             }
             else if (pressedButton.Name == "btnBrightenUp")
-            {
-                popup = new Popup();
+            {               
                 CreateBrighterImage();
             }
             else if (pressedButton.Name == "btnSaveImage")
@@ -44,17 +43,25 @@ namespace Bild_Hell_Rechner
       
         private void CreateBrighterImage()
         {
-            int brightnessLevel = (int)sldBrightness.Value;
-
-            Task tskBrightenUp = Task.Run(() =>
+            if (ms != null)
             {
-                bmpResult = ImageBrightener.BrightenUp(chosenFile.FullName, brightnessLevel, popup, this);
-                Application.Current.Dispatcher.Invoke(() => ProcessFinishedImage());
-            });
+                btnBrightenUp.IsEnabled = false;
+                popup = new Popup();
+                int brightnessLevel = (int)sldBrightness.Value;
+
+                Task tskBrightenUp = Task.Run(() =>
+                {
+                    bmpResult = ImageBrightener.BrightenUp(chosenFile.FullName, brightnessLevel, popup, this);
+                    Application.Current.Dispatcher.Invoke(() => ProcessFinishedImage());
+                });
+            }
+            else
+            {
+                MessageBox.Show("No Image loaded!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         private void ProcessFinishedImage()
-        {
-            ms = new MemoryStream();
+        {            
             bmpResult.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
             ms.Seek(0, SeekOrigin.Begin);
             BitmapImage bmpi = new BitmapImage();
@@ -62,6 +69,7 @@ namespace Bild_Hell_Rechner
             bmpi.StreamSource = ms;
             bmpi.EndInit();
             img.Source = bmpi;
+            btnBrightenUp.IsEnabled = true;
         }
      
         /// <summary>
@@ -79,6 +87,7 @@ namespace Bild_Hell_Rechner
                 if (IsFileLegalImage(chosenFile))
                 {
                     img.Source = new BitmapImage(new Uri(chosenFile.FullName)); //Fuegt Image in GUI ein
+                    ms = new MemoryStream();
                 }
                 else
                 {
@@ -89,11 +98,21 @@ namespace Bild_Hell_Rechner
 
         private void SaveImage()
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Png Image|*.png|JPeg Image|*.jpg"; //Legt Fest, welche Datentyoen zum Speicher erlaubt sind
-            saveFileDialog.ShowDialog(); //Oeffnet Explorer
-            Bitmap bitmap = new Bitmap(ms);
-            bitmap.Save(saveFileDialog.FileName);
+            if (ms != null)
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "Png Image|*.png|JPeg Image|*.jpg"; //Legt Fest, welche Datentyoen zum Speicher erlaubt sind
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    Bitmap bitmap = new Bitmap(ms);
+                    bitmap.Save(saveFileDialog.FileName);
+                }
+            }
+            else
+            {
+                MessageBox.Show("No Image loaded!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+          
         }
 
         /// <summary>
