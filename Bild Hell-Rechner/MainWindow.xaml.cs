@@ -24,20 +24,17 @@ namespace Bild_Hell_Rechner
             InitializeComponent();
         }
 
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Button pressedButton = (Button)sender;
             if (pressedButton.Name == "btnLoadImage")
             {
-
                 ChoseSourceImage();
             }
             else if (pressedButton.Name == "btnBrightenUp")
             {
                 popup = new Popup();
                 CreateBrighterImage();
-
             }
             else if (pressedButton.Name == "btnSaveImage")
             {
@@ -55,7 +52,6 @@ namespace Bild_Hell_Rechner
                 Application.Current.Dispatcher.Invoke(() => ProcessFinishedImage());
             });
         }
-
         private void ProcessFinishedImage()
         {
             ms = new MemoryStream();
@@ -68,7 +64,6 @@ namespace Bild_Hell_Rechner
             img.Source = bmpi;
         }
      
-
         /// <summary>
         /// Opens File Explorer and sets the Source Image
         /// after User-Input
@@ -84,8 +79,10 @@ namespace Bild_Hell_Rechner
                 if (IsFileLegalImage(chosenFile))
                 {
                     img.Source = new BitmapImage(new Uri(chosenFile.FullName)); //Fuegt Image in GUI ein
-
-                    //TestDataTypeStuffLolHaha(chosenFile.FullName); //My test Method
+                }
+                else
+                {
+                    MessageBox.Show("Illegal file extension! \nOnly .png, .jpg or .jpeg", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -113,40 +110,8 @@ namespace Bild_Hell_Rechner
                 {
                     return true;
                 }
-            }
+            }  
             return false;
-        }
-
-
-        //TODO Understand Code from Stack Overflow
-        /// <summary>
-        /// Do not call this in finished Project!
-        /// Just for testing stuff lulZ
-        /// </summary>
-        /// <param name="imgPath"></param>
-        private void TestDataTypeStuffLolHaha(string imgPath)
-        {
-            //  return;
-            Bitmap bmp = new Bitmap(imgPath);
-
-            MemoryStream ms = new MemoryStream();
-
-            bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-
-            BitmapImage image = new BitmapImage();
-
-
-            image.BeginInit();
-            ms.Seek(0, SeekOrigin.Begin);
-            MemoryStream streamy = new MemoryStream(ms.ToArray());
-            image.StreamSource = streamy;
-
-            image.EndInit();
-
-            image.StreamSource = streamy;
-
-            // ms.Dispose(); //Macht Probleme TODO: Fix
-            img.Source = image;
         }
 
     }

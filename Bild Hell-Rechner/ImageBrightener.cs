@@ -16,15 +16,7 @@ namespace Bild_Hell_Rechner
 
         public static Bitmap BrightenUp(string imagePath, int brightnessMultiplicator, Popup popup, MainWindow w)
         {
-            Console.WriteLine("Starting with brightening-process...");
-
             Bitmap image = new Bitmap(imagePath);
-
-            Console.WriteLine("Task started...");
-
-            Stopwatch sw = new Stopwatch();
-            sw.Start();
-
 
             for (int y = 0; y < image.Height; y++)
             {
@@ -49,12 +41,12 @@ namespace Bild_Hell_Rechner
                     RefreshProgressBar(popup,y, image.Height);
                 }
             }
-
-            sw.Stop();
-            RefreshProgressBar(popup, image.Height, image.Height);
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                popup.Close();
+            });
             return image;
         }
-
 
         private static void RefreshProgressBar(Popup popup, int y, int height)
         {

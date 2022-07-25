@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Bild_Hell_Rechner"
         mc:Ignorable="d"
         Title="Loading... Please wait" Height="250" Width="400" ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
         x:Name="popup">
 
 
@@ -13,9 +14,11 @@
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label Content="Loading... Please wait" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0"/>
-        <ProgressBar x:Name="progressbar" Value="0" Minimum="0" Maximum="100" Width="380" Height="30" Foreground="#00FF00" Background="#AAFFAA" Grid.Row="1"/>
+        <Label Content="Loading..." FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="0"/>
+        <Label Content="Please do not close the window!" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Row="1"/>
+        <ProgressBar x:Name="progressbar" Value="0" Minimum="0" Maximum="100" Width="380" Height="30" Foreground="#00FF00" Background="#AAFFAA" Grid.Row="2"/>
     </Grid>
     
 </Window>

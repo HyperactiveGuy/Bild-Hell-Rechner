@@ -21,27 +21,8 @@ namespace Bild_Hell_Rechner
     {
         public Popup()
         {
-            InitializeComponent();
-            
+            InitializeComponent();            
             Show();
-          //  Task t = Task.Run(() => StretchProgressBar());
-        }
-
-        public static void StretchProgressBar(Popup popup, int currentY, int imageHeight)
-        {
-            Console.WriteLine("Method");
-            Task t = Task.Run(() =>
-            {
-                Console.WriteLine("Task");
-
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    Console.WriteLine("Dispatcher");
-                    popup.progressbar.Value = (double)currentY * 100.0d / (double)imageHeight;
-                });
-            });
-
-
         }
     }
 }
