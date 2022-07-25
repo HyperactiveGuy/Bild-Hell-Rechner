@@ -16,11 +16,14 @@ namespace Bild_Hell_Rechner
     {
         FileInfo chosenFile;
         MemoryStream ms;
+        Popup popup;
+        Bitmap bmpResult;
+        Task tskBrightenUp;
         public MainWindow()
         {
             InitializeComponent();
-
         }
+
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -32,6 +35,7 @@ namespace Bild_Hell_Rechner
             }
             else if (pressedButton.Name == "btnBrightenUp")
             {
+                popup = new Popup();
                 CreateBrighterImage();
 
             }
@@ -40,37 +44,30 @@ namespace Bild_Hell_Rechner
                 SaveImage();
             }
         }
-
-        private void TaskTest()
-        {
-
-            Task t1 = Task.Run(() => Test(1));
-            Task t2 = Task.Run(() => Test(2));
-            Task t3 = Task.Run(() => Test(3));
-            Task t4 = Task.Run(() => Test(4));
-        }
-        private void Test(int x)
-        {
-            Console.WriteLine("Testi " + x);
-        }
-
+      
         private void CreateBrighterImage()
         {
-            Bitmap bmpResult = ImageBrightener.BrightenUp(chosenFile.FullName, (int)sldBrightness.Value);
-            BitmapImage bmpi = new BitmapImage();
+            int brightnessLevel = (int)sldBrightness.Value;
 
+            Task tskBrightenUp = Task.Run(() =>
+            {
+                bmpResult = ImageBrightener.BrightenUp(chosenFile.FullName, brightnessLevel, popup, this);
+                Application.Current.Dispatcher.Invoke(() => ProcessFinishedImage());
+            });
+        }
+
+        private void ProcessFinishedImage()
+        {
             ms = new MemoryStream();
             bmpResult.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-
             ms.Seek(0, SeekOrigin.Begin);
-
+            BitmapImage bmpi = new BitmapImage();
             bmpi.BeginInit();
             bmpi.StreamSource = ms;
             bmpi.EndInit();
-
             img.Source = bmpi;
         }
-
+     
 
         /// <summary>
         /// Opens File Explorer and sets the Source Image

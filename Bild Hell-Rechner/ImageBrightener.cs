@@ -6,15 +6,16 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Threading;
 
 namespace Bild_Hell_Rechner
 {
     internal static class ImageBrightener
     {
 
-        public static Bitmap BrightenUp(string imagePath, int brightnessMultiplicator)
+        public static Bitmap BrightenUp(string imagePath, int brightnessMultiplicator, Popup popup, MainWindow w)
         {
-
             Console.WriteLine("Starting with brightening-process...");
 
             Bitmap image = new Bitmap(imagePath);
@@ -23,6 +24,8 @@ namespace Bild_Hell_Rechner
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
+
+
             for (int y = 0; y < image.Height; y++)
             {
                 for (int x = 0; x < image.Width; x++)
@@ -41,11 +44,24 @@ namespace Bild_Hell_Rechner
 
                     image.SetPixel(x, y, newColor); //ueberschreibt Pixel
                 }
+                if (y % 100 == 0)
+                {
+                    RefreshProgressBar(popup,y, image.Height);
+                }
             }
+
             sw.Stop();
-            Console.WriteLine("Finished Brightening Process!");
-            Console.WriteLine($"Runtime in Milliseconds: {sw.ElapsedMilliseconds}");
+            RefreshProgressBar(popup, image.Height, image.Height);
             return image;
+        }
+
+
+        private static void RefreshProgressBar(Popup popup, int y, int height)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                popup.progressbar.Value = (double)y * 100.0d / (double)height;
+            });
         }
     }
 }
